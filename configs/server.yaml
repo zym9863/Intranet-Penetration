@@ -1,0 +1,8 @@
+bind_port: 7000
+token: "my-secret-token"
+tls:
+  cert: server.crt
+  key: server.key
+max_connections: 100
+http_port: 80
+https_port: 443
