@@ -42,6 +42,35 @@ go build -o chuan ./cmd/server
 go build -o chuan-client ./cmd/client
 ```
 
+### Docker Deployment (Recommended)
+
+1. Start server with Docker Compose:
+
+```bash
+docker compose up -d chuan-server
+```
+
+2. (Optional) Start server + client together:
+
+```bash
+docker compose --profile client up -d
+```
+
+3. Check status and logs:
+
+```bash
+docker compose ps
+docker compose logs -f chuan-server
+```
+
+Default config files:
+
+- `configs/server.docker.yaml`
+- `configs/client.docker.yaml`
+
+Default exposed ports: `7000`, `80`, `443`, `10080/tcp`, `10053/udp`.
+Certificates are auto-generated in the container and persisted to `./data/server/`.
+
 ### Server Deployment
 
 1. Create a config file `server.yaml`:

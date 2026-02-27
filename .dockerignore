@@ -1,0 +1,14 @@
+.git
+.gitignore
+.claude
+.vscode
+.idea
+*.exe
+*.test
+*.out
+server
+client
+README.md
+README-EN.md
+LICENSE
+test

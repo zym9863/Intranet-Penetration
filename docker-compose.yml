@@ -1,0 +1,37 @@
+services:
+  chuan-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: server
+    image: chuan-server:latest
+    container_name: chuan-server
+    restart: unless-stopped
+    command: ["-c", "/app/configs/server.docker.yaml"]
+    ports:
+      - "7000:7000"
+      - "80:80"
+      - "443:443"
+      - "10080:10080"
+      - "10053:10053/udp"
+    volumes:
+      - ./configs/server.docker.yaml:/app/configs/server.docker.yaml:ro
+      - ./data/server:/app/data
+
+  chuan-client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: client
+    image: chuan-client:latest
+    container_name: chuan-client
+    restart: unless-stopped
+    command: ["-c", "/app/configs/client.docker.yaml"]
+    depends_on:
+      - chuan-server
+    profiles:
+      - client
+    volumes:
+      - ./configs/client.docker.yaml:/app/configs/client.docker.yaml:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

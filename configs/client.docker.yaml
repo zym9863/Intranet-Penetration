@@ -1,0 +1,16 @@
+server_addr: "chuan-server:7000"
+token: "my-secret-token"
+tls_skip_verify: true
+tunnels:
+  - name: web
+    type: tcp
+    local_port: 8080
+    remote_port: 10080
+  - name: dns
+    type: udp
+    local_port: 53
+    remote_port: 10053
+  - name: blog
+    type: http
+    local_port: 8080
+    domain: blog.example.com

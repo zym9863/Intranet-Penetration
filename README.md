@@ -42,6 +42,35 @@ go build -o chuan ./cmd/server
 go build -o chuan-client ./cmd/client
 ```
 
+### Docker 部署（推荐）
+
+1. 使用 Docker Compose 启动服务端：
+
+```bash
+docker compose up -d chuan-server
+```
+
+2. （可选）同时启动客户端：
+
+```bash
+docker compose --profile client up -d
+```
+
+3. 查看运行状态：
+
+```bash
+docker compose ps
+docker compose logs -f chuan-server
+```
+
+默认使用配置文件：
+
+- `configs/server.docker.yaml`
+- `configs/client.docker.yaml`
+
+默认映射端口：`7000`、`80`、`443`、`10080/tcp`、`10053/udp`
+证书会在容器内自动生成并持久化到 `./data/server/`。
+
 ### 服务端部署
 
 1. 创建配置文件 `server.yaml`:
