@@ -98,6 +98,36 @@ Set the following in `Settings -> Secrets and variables -> Actions`:
 
 GHCR authentication is handled with `GITHUB_TOKEN` automatically.
 
+### GitHub Actions Auto-Update Server on Push (SSH)
+
+This repository includes workflow: `.github/workflows/deploy-server.yml`
+
+- Triggers:
+  - Push to `main`
+  - Manual trigger (`workflow_dispatch`)
+- Workflow behavior:
+  - SSH into your server
+  - Sync deployment directory to `origin/main`
+  - Run `docker compose up -d --build chuan-server`
+
+Set the following Secrets in `Settings -> Secrets and variables -> Actions`:
+
+- `SSH_HOST`: server host/IP
+- `SSH_PORT`: SSH port (for example `22`)
+- `SSH_USER`: SSH username
+- `SSH_PRIVATE_KEY`: private key for SSH login (use a dedicated deploy key)
+- `DEPLOY_PATH`: project path on server (already cloned)
+
+Server prerequisites: `git`, `docker`, `docker compose`.
+
+Before the first auto-deploy, initialize once on the server:
+
+```bash
+git clone <your-repo-url> /path/to/your/project
+cd /path/to/your/project
+docker compose up -d --build chuan-server
+```
+
 ### Server Deployment
 
 1. Create a config file `server.yaml`:

@@ -98,6 +98,36 @@ docker compose logs -f chuan-server
 
 GHCR 使用 `GITHUB_TOKEN` 自动鉴权，无需额外配置。
 
+### GitHub Actions 推送代码后自动更新服务器（SSH）
+
+仓库内置工作流：`.github/workflows/deploy-server.yml`
+
+- 触发条件：
+  - 推送到 `main`
+  - 手动触发（`workflow_dispatch`）
+- 工作流行为：
+  - SSH 登录服务器
+  - 进入部署目录并同步到 `origin/main`
+  - 执行 `docker compose up -d --build chuan-server`
+
+请在 `Settings -> Secrets and variables -> Actions` 配置以下 Secrets：
+
+- `SSH_HOST`：服务器地址
+- `SSH_PORT`：SSH 端口（例如 `22`）
+- `SSH_USER`：SSH 用户名
+- `SSH_PRIVATE_KEY`：用于登录服务器的私钥（建议专用 deploy key）
+- `DEPLOY_PATH`：服务器上的项目目录（已提前 `git clone`）
+
+服务器需要预装：`git`、`docker`、`docker compose`。
+
+首次部署前，先在服务器执行一次：
+
+```bash
+git clone <your-repo-url> /path/to/your/project
+cd /path/to/your/project
+docker compose up -d --build chuan-server
+```
+
 ### 服务端部署
 
 1. 创建配置文件 `server.yaml`:
