@@ -56,6 +56,12 @@ docker compose up -d chuan-server
 docker compose --profile client up -d
 ```
 
+Or start client only (without auto-starting server):
+
+```bash
+docker compose up -d chuan-client
+```
+
 3. Check status and logs:
 
 ```bash

@@ -27,8 +27,6 @@ services:
     container_name: chuan-client
     restart: unless-stopped
     command: ["-c", "/app/configs/client.docker.yaml"]
-    depends_on:
-      - chuan-server
     profiles:
       - client
     volumes:

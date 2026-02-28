@@ -56,6 +56,12 @@ docker compose up -d chuan-server
 docker compose --profile client up -d
 ```
 
+或仅启动客户端（不会自动拉起服务端）：
+
+```bash
+docker compose up -d chuan-client
+```
+
 3. 查看运行状态：
 
 ```bash
