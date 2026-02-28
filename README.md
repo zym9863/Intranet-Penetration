@@ -71,6 +71,27 @@ docker compose logs -f chuan-server
 默认映射端口：`7000`、`80`、`443`、`10080/tcp`、`10053/udp`
 证书会在容器内自动生成并持久化到 `./data/server/`。
 
+### GitHub Actions 自动推送镜像（GHCR + Docker Hub）
+
+仓库内置工作流：`.github/workflows/docker-publish.yml`
+
+- 触发条件：
+  - 推送到 `main`
+  - 推送标签 `v*`（如 `v1.0.0`）
+  - 手动触发（`workflow_dispatch`）
+- 推送镜像：
+  - `ghcr.io/<owner>/chuan-server`
+  - `ghcr.io/<owner>/chuan-client`
+  - `<dockerhub-username>/chuan-server`
+  - `<dockerhub-username>/chuan-client`
+
+请在 GitHub 仓库 `Settings -> Secrets and variables -> Actions` 中配置：
+
+- Repository Variable：`DOCKERHUB_USERNAME`（Docker Hub 用户名）
+- Repository Secret：`DOCKERHUB_TOKEN`（Docker Hub Access Token）
+
+GHCR 使用 `GITHUB_TOKEN` 自动鉴权，无需额外配置。
+
 ### 服务端部署
 
 1. 创建配置文件 `server.yaml`:

@@ -71,6 +71,27 @@ Default config files:
 Default exposed ports: `7000`, `80`, `443`, `10080/tcp`, `10053/udp`.
 Certificates are auto-generated in the container and persisted to `./data/server/`.
 
+### GitHub Actions Docker Publish (GHCR + Docker Hub)
+
+This repository includes workflow: `.github/workflows/docker-publish.yml`
+
+- Triggers:
+  - Push to `main`
+  - Push tag `v*` (for example `v1.0.0`)
+  - Manual trigger (`workflow_dispatch`)
+- Published images:
+  - `ghcr.io/<owner>/chuan-server`
+  - `ghcr.io/<owner>/chuan-client`
+  - `<dockerhub-username>/chuan-server`
+  - `<dockerhub-username>/chuan-client`
+
+Set the following in `Settings -> Secrets and variables -> Actions`:
+
+- Repository Variable: `DOCKERHUB_USERNAME` (your Docker Hub username)
+- Repository Secret: `DOCKERHUB_TOKEN` (your Docker Hub access token)
+
+GHCR authentication is handled with `GITHUB_TOKEN` automatically.
+
 ### Server Deployment
 
 1. Create a config file `server.yaml`:
