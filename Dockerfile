@@ -18,6 +18,7 @@ RUN apk add --no-cache ca-certificates tzdata
 
 FROM runtime-base AS server
 COPY --from=builder /out/chuan-server /usr/local/bin/chuan-server
+RUN mkdir -p /app/data && chown -R chuan:chuan /app/data
 USER chuan
 EXPOSE 7000 80 443
 ENTRYPOINT ["chuan-server"]
