@@ -28,7 +28,31 @@ jobs:
           script: |
             set -e
             cd "${{ secrets.DEPLOY_PATH }}"
-            git fetch --all --prune
+
+            fetch_with_retry() {
+              local retries=5
+              local delay=5
+              local attempt=1
+
+              while [ "$attempt" -le "$retries" ]; do
+                echo "[deploy] git fetch attempt ${attempt}/${retries}"
+                if git -c http.version=HTTP/1.1 fetch --all --prune; then
+                  return 0
+                fi
+
+                if [ "$attempt" -lt "$retries" ]; then
+                  echo "[deploy] git fetch failed, retrying in ${delay}s..."
+                  sleep "$delay"
+                fi
+
+                attempt=$((attempt + 1))
+              done
+
+              echo "[deploy] git fetch failed after ${retries} attempts"
+              return 1
+            }
+
+            fetch_with_retry
             git checkout main
             git reset --hard origin/main
             docker compose up -d --build chuan-server
