@@ -23,7 +23,7 @@ Chuan (穿) 是一个用 Go 语言实现的高性能内网穿透工具，支持 
 │                  │   TLS +    │                                  │
 │  本地服务        │   smux     │   控制通道 (:7000)               │
 │  :8080 ◄────┐   │◄──────────►│                                  │
-│  :3306 ◄──┐ │   │  单连接     │   TCP代理端口 (:10080, :13306)   │
+│  :3306 ◄──┐ │   │  单连接     │   TCP代理端口 (:20080, :13306)   │
 │  :53   ◄┐ │ │   │  多路复用   │   HTTP反向代理 (:80/:443)        │
 │         │ │ │   │            │   UDP代理端口 (:10053)           │
 └─────────┼─┼─┼───┘            └──────┼──┼──┼─────────────────────┘
@@ -74,7 +74,7 @@ docker compose logs -f chuan-server
 - `configs/server.docker.yaml`
 - `configs/client.docker.yaml`
 
-默认映射端口：`7000`、`80`、`443`、`10080/tcp`、`10053/udp`
+默认映射端口：`7000`、`80`、`443`、`20080/tcp`、`10053/udp`
 证书会在容器内自动生成并持久化到 `./data/server/`。
 
 ### GitHub Actions 自动推送镜像（GHCR + Docker Hub）
@@ -165,7 +165,7 @@ tunnels:
   - name: web
     type: tcp
     local_port: 8080
-    remote_port: 10080
+    remote_port: 20080
   - name: db
     type: tcp
     local_port: 3306
@@ -188,7 +188,7 @@ chuan-client -c client.yaml
 
 # 命令行方式
 chuan-client -s your-vps.com:7000 -t your-secret-token \
-  --tcp 8080:10080 \
+  --tcp 8080:20080 \
   --udp 53:10053 \
   --http 8080:blog.example.com
 ```
@@ -200,11 +200,11 @@ chuan-client -s your-vps.com:7000 -t your-secret-token \
 将内网 Web 服务映射到公网:
 
 ```bash
-# 内网 8080 端口映射到公网 10080
-chuan-client -s vps.com:7000 -t token --tcp 8080:10080
+# 内网 8080 端口映射到公网 20080
+chuan-client -s vps.com:7000 -t token --tcp 8080:20080
 ```
 
-访问方式: `curl http://vps.com:10080`
+访问方式: `curl http://vps.com:20080`
 
 ### UDP 端口映射
 

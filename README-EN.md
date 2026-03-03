@@ -23,7 +23,7 @@ Chuan (穿) is a high-performance intranet penetration tool written in Go. It su
 │                  │   TLS +    │                                  │
 │  本地服务        │   smux     │   控制通道 (:7000)               │
 │  :8080 ◄────┐   │◄──────────►│                                  │
-│  :3306 ◄──┐ │   │  单连接     │   TCP代理端口 (:10080, :13306)   │
+│  :3306 ◄──┐ │   │  单连接     │   TCP代理端口 (:20080, :13306)   │
 │  :53   ◄┐ │ │   │  多路复用   │   HTTP反向代理 (:80/:443)        │
 │         │ │ │   │            │   UDP代理端口 (:10053)           │
 └─────────┼─┼─┼───┘            └──────┼──┼──┼─────────────────────┘
@@ -74,7 +74,7 @@ Default config files:
 - `configs/server.docker.yaml`
 - `configs/client.docker.yaml`
 
-Default exposed ports: `7000`, `80`, `443`, `10080/tcp`, `10053/udp`.
+Default exposed ports: `7000`, `80`, `443`, `20080/tcp`, `10053/udp`.
 Certificates are auto-generated in the container and persisted to `./data/server/`.
 
 ### GitHub Actions Docker Publish (GHCR + Docker Hub)
@@ -165,7 +165,7 @@ tunnels:
   - name: web
     type: tcp
     local_port: 8080
-    remote_port: 10080
+    remote_port: 20080
   - name: db
     type: tcp
     local_port: 3306
@@ -188,7 +188,7 @@ chuan-client -c client.yaml
 
 # command line mode
 chuan-client -s your-vps.com:7000 -t your-secret-token \
-  --tcp 8080:10080 \
+  --tcp 8080:20080 \
   --udp 53:10053 \
   --http 8080:blog.example.com
 ```
@@ -200,11 +200,11 @@ chuan-client -s your-vps.com:7000 -t your-secret-token \
 Map an internal web service to the public network:
 
 ```bash
-# internal 8080 mapped to public 10080
-chuan-client -s vps.com:7000 -t token --tcp 8080:10080
+# internal 8080 mapped to public 20080
+chuan-client -s vps.com:7000 -t token --tcp 8080:20080
 ```
 
-Access via: `curl http://vps.com:10080`
+Access via: `curl http://vps.com:20080`
 
 ### UDP Port Mapping
 
